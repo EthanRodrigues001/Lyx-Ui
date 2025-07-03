@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tracker",
+  "type": "registry:component",
+  "title": "Tracker",
+  "description": "A simple tracker component.",
+  "dependencies": [
+    "@radix-ui/react-hover-card"
+  ],
+  "files": [
+    {
+      "path": "registry/new-york/lyxui/tracker.tsx",
+      "content": "\"use client\";\r\nimport React from \"react\";\r\nimport * as HoverCardPrimitives from \"@radix-ui/react-hover-card\";\r\n\r\nimport { cn } from \"@/lib/utils\";\r\n\r\ninterface TrackerBlockProps {\r\n  key?: string | number;\r\n  color?: string;\r\n  tooltip?: string;\r\n  hoverEffect?: boolean;\r\n  defaultBackgroundColor?: string;\r\n}\r\n\r\nconst Block = ({\r\n  color,\r\n  tooltip,\r\n  defaultBackgroundColor,\r\n  hoverEffect,\r\n}: TrackerBlockProps) => {\r\n  const [open, setOpen] = React.useState(false);\r\n  return (\r\n    <HoverCardPrimitives.Root\r\n      open={open}\r\n      onOpenChange={setOpen}\r\n      openDelay={0}\r\n      closeDelay={0}\r\n      tremor-id=\"tremor-raw\"\r\n    >\r\n      <HoverCardPrimitives.Trigger onClick={() => setOpen(true)} asChild>\r\n        <div className=\"size-full overflow-hidden px-[0.5px] transition first:rounded-l-[4px] first:pl-0 last:rounded-r-[4px] last:pr-0 sm:px-px\">\r\n          <div\r\n            className={cn(\r\n              \"size-full rounded-[1px]\",\r\n              color || defaultBackgroundColor,\r\n              hoverEffect ? \"hover:opacity-50\" : \"\"\r\n            )}\r\n          />\r\n        </div>\r\n      </HoverCardPrimitives.Trigger>\r\n      <HoverCardPrimitives.Portal>\r\n        <HoverCardPrimitives.Content\r\n          sideOffset={10}\r\n          side=\"top\"\r\n          align=\"center\"\r\n          avoidCollisions\r\n          className={cn(\r\n            // base\r\n            \"w-auto rounded-md px-2 py-1 text-sm shadow-md\",\r\n            // text color\r\n            \"text-white dark:text-gray-900\",\r\n            // background color\r\n            \"bg-gray-900 dark:bg-gray-50\"\r\n          )}\r\n        >\r\n          {tooltip}\r\n        </HoverCardPrimitives.Content>\r\n      </HoverCardPrimitives.Portal>\r\n    </HoverCardPrimitives.Root>\r\n  );\r\n};\r\n\r\nBlock.displayName = \"Block\";\r\n\r\ninterface TrackerProps extends React.HTMLAttributes<HTMLDivElement> {\r\n  data: TrackerBlockProps[];\r\n  defaultBackgroundColor?: string;\r\n  hoverEffect?: boolean;\r\n}\r\n\r\nconst Tracker = React.forwardRef<HTMLDivElement, TrackerProps>(\r\n  (\r\n    {\r\n      data = [],\r\n      defaultBackgroundColor = \"bg-gray-400 dark:bg-gray-400\",\r\n      className,\r\n      hoverEffect,\r\n      ...props\r\n    },\r\n    forwardedRef\r\n  ) => {\r\n    return (\r\n      <div\r\n        ref={forwardedRef}\r\n        className={cn(\"group flex h-8 w-full items-center\", className)}\r\n        {...props}\r\n      >\r\n        {data.map((props, index) => (\r\n          <Block\r\n            key={props.key ?? index}\r\n            defaultBackgroundColor={defaultBackgroundColor}\r\n            hoverEffect={hoverEffect}\r\n            {...props}\r\n          />\r\n        ))}\r\n      </div>\r\n    );\r\n  }\r\n);\r\n\r\nTracker.displayName = \"Tracker\";\r\n\r\nexport { Tracker, type TrackerBlockProps };\r\n",
+      "type": "registry:ui",
+      "target": "components/lyxui/tracker.tsx"
+    }
+  ]
+}

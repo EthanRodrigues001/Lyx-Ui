@@ -1,0 +1,14 @@
+{
+  "title:": "Documentation",
+  "root": true,
+  "pages": [
+    "!index",
+    "---Guide---",
+    "get-started",
+    "installation",
+    "---Components---",
+    "..../components/",
+
+    "!test"
+  ]
+}

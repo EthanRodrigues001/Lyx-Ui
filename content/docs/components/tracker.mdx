@@ -1,0 +1,473 @@
+---
+title: Tracker
+description: A flexible uptime/status tracker component with hoverable tooltips, ideal for status pages and dashboards.
+---
+
+import { PreviewContainer } from "@/components/PreviewContainer";
+import { TrackerDemo } from "@/components/lyx/tracker-demo";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { TypeTable } from "fumadocs-ui/components/type-table";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## Example
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <PreviewContainer>
+      <TrackerDemo />
+    </PreviewContainer>
+  </Tab>
+  <Tab value="Code">
+    ```js
+    import React from "react";
+    import { Card, CardContent } from "@/components/ui/card";
+    import { Check } from "lucide-react";
+    import { Tracker } from "../lyxui/tracker";
+
+    // Hardcoded uptime data for the last 90 days
+    const generateUptimeData = () => {
+    const data = [];
+    const today = new Date();
+
+    // Hardcoded pattern: mostly operational with some issues
+    const statusPattern = [
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "warning",
+    "warning",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "down",
+    "down",
+    "up",
+    "up",
+    "up",
+    "unknown",
+    "up",
+    ];
+
+    for (let i = 89; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+
+        const status = statusPattern[89 - i] || "up";
+        let tooltip = "Operational";
+
+        switch (status) {
+          case "down":
+            tooltip = "Service unavailable";
+            break;
+          case "warning":
+            tooltip = "Performance issues";
+            break;
+          case "unknown":
+            tooltip = "No data";
+            break;
+          default:
+            tooltip = "Operational";
+        }
+
+        data.push({
+          color:
+            status === "up"
+              ? "bg-blue-500"
+              : status === "warning"
+              ? "bg-yellow-500"
+              : status === "down"
+              ? "bg-red-500"
+              : "bg-muted",
+          status,
+          tooltip: `${tooltip} - ${date.toLocaleDateString()}`,
+          date: date.toLocaleDateString(),
+        });
+
+    }
+
+    return data;
+    };
+
+    const TrackerDemo = () => {
+    const uptimeData = generateUptimeData();
+    return (
+    <div className="w-full max-w-4xl mx-auto space-y-6">
+    <Card className="p-4 sm:p-6">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
+    <div className="flex items-center gap-3">
+    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+    <Check className="w-5 h-5 text-white" />
+    </div>
+    <h2 className="text-lg sm:text-xl font-semibold">example.com</h2>
+    </div>
+    <div className="text-left sm:text-right">
+    <span className="text-xl sm:text-2xl font-bold text-green-600">
+    99.9%
+    </span>
+    <p className="text-sm text-muted-foreground">uptime</p>
+    </div>
+    </div>
+
+            <CardContent className="p-0">
+              {/* Desktop view */}
+              <div className="hidden xl:block">
+                <Tracker data={uptimeData} className="w-full" />
+              </div>
+
+              {/* Tablet view */}
+              <div className="hidden lg:block xl:hidden">
+                <Tracker data={uptimeData.slice(15)} className="w-full" />
+              </div>
+              <div className="hidden md:block lg:hidden">
+                <Tracker data={uptimeData.slice(30)} className="w-full" />
+              </div>
+
+              {/* Small tablet view - 45 days */}
+              <div className="hidden sm:block md:hidden">
+                <Tracker data={uptimeData.slice(45)} className="w-full" />
+              </div>
+
+              {/* Mobile view */}
+              <div className="block sm:hidden">
+                <Tracker data={uptimeData.slice(60)} className="w-full" />
+              </div>
+
+              <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                <span>90 days ago</span>
+                <span>Today</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Status Legend */}
+          <div className="flex flex-wrap gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-blue-500 rounded-sm"></div>
+              <span>Operational</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-yellow-500 rounded-sm"></div>
+              <span>Performance Issues</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
+              <span>Service Unavailable</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-muted rounded-sm"></div>
+              <span>No Data</span>
+            </div>
+          </div>
+        </div>
+
+    );
+    };
+
+    export { TrackerDemo };
+
+    ```
+
+  </Tab>
+</Tabs>
+
+## Installation
+
+### CLI `(Recommended)`
+
+<Tabs items={["npm", "yarn", "pnpm", "bun"]}>
+  <Tab value="npm">
+
+```bash
+npx shadcn@latest add http://lyxui.wisplabs.xyz/r/tracker.json
+```
+
+  </Tab>
+  <Tab value="yarn">
+
+```bash
+yarn shadcn@latest add http://lyxui.wisplabs.xyz/r/tracker.json
+```
+
+  </Tab>
+  <Tab value="pnpm">
+
+```bash
+pnpm dlx shadcn@latest add http://lyxui.wisplabs.xyz/r/tracker.json
+```
+
+  </Tab>
+  <Tab value="bun">
+
+```bash
+bunx --bun  add http://lyxui.wisplabs.xyz/r/tracker.json
+```
+
+  </Tab>
+</Tabs>
+
+### Manual
+
+<Steps>
+  <Step>
+    Install the following dependencies:
+    <Tabs items={["npm", "yarn", "pnpm", "bun"]}>
+      <Tab value="npm">```bash npm install @radix-ui/react-hover-card ```</Tab>
+      <Tab value="yarn">```bash yarn add @radix-ui/react-hover-card ```</Tab>
+      <Tab value="pnpm">```bash pnpm i @radix-ui/react-hover-card ```</Tab>
+      <Tab value="bun">```bash bun add @radix-ui/react-hover-card ```</Tab>
+    </Tabs>
+  </Step>
+  <Step>
+    Copy the source code to `components/lyxui/tracker.tsx`
+     ```js
+     "use client";
+      import React from "react";
+      import * as HoverCardPrimitives from "@radix-ui/react-hover-card";
+
+      import { cn } from "@/lib/utils";
+
+      interface TrackerBlockProps {
+        key?: string | number;
+        color?: string;
+        tooltip?: string;
+        hoverEffect?: boolean;
+        defaultBackgroundColor?: string;
+      }
+
+      const Block = ({
+        color,
+        tooltip,
+        defaultBackgroundColor,
+        hoverEffect,
+      }: TrackerBlockProps) => {
+        const [open, setOpen] = React.useState(false);
+        return (
+          <HoverCardPrimitives.Root
+            open={open}
+            onOpenChange={setOpen}
+            openDelay={0}
+            closeDelay={0}
+            tremor-id="tremor-raw"
+          >
+            <HoverCardPrimitives.Trigger onClick={() => setOpen(true)} asChild>
+              <div className="size-full overflow-hidden px-[0.5px] transition first:rounded-l-[4px] first:pl-0 last:rounded-r-[4px] last:pr-0 sm:px-px">
+                <div
+                  className={cn(
+                    "size-full rounded-[1px]",
+                    color || defaultBackgroundColor,
+                    hoverEffect ? "hover:opacity-50" : ""
+                  )}
+                />
+              </div>
+            </HoverCardPrimitives.Trigger>
+            <HoverCardPrimitives.Portal>
+              <HoverCardPrimitives.Content
+                sideOffset={10}
+                side="top"
+                align="center"
+                avoidCollisions
+                className={cn(
+                  // base
+                  "w-auto rounded-md px-2 py-1 text-sm shadow-md",
+                  // text color
+                  "text-white dark:text-gray-900",
+                  // background color
+                  "bg-gray-900 dark:bg-gray-50"
+                )}
+              >
+                {tooltip}
+              </HoverCardPrimitives.Content>
+            </HoverCardPrimitives.Portal>
+          </HoverCardPrimitives.Root>
+        );
+      };
+
+      Block.displayName = "Block";
+
+      interface TrackerProps extends React.HTMLAttributes<HTMLDivElement> {
+        data: TrackerBlockProps[];
+        defaultBackgroundColor?: string;
+        hoverEffect?: boolean;
+      }
+
+      const Tracker = React.forwardRef<HTMLDivElement, TrackerProps>(
+        (
+          {
+            data = [],
+            defaultBackgroundColor = "bg-gray-400 dark:bg-gray-400",
+            className,
+            hoverEffect,
+            ...props
+          },
+          forwardedRef
+        ) => {
+          return (
+            <div
+              ref={forwardedRef}
+              className={cn("group flex h-8 w-full items-center", className)}
+              {...props}
+            >
+              {data.map((props, index) => (
+                <Block
+                  key={props.key ?? index}
+                  defaultBackgroundColor={defaultBackgroundColor}
+                  hoverEffect={hoverEffect}
+                  {...props}
+                />
+              ))}
+            </div>
+          );
+        }
+      );
+
+      Tracker.displayName = "Tracker";
+
+      export { Tracker, type TrackerBlockProps };
+
+     ```
+
+  </Step>
+  <Step>
+    You are ready to use the component! Simply import it and start using it in
+    your code.
+  </Step>
+</Steps>
+
+## Props
+
+<TypeTable
+  type={{
+    data: {
+      description:
+        "Array of block objects for the tracker. Each block represents a day's status.",
+      type: "TrackerBlockProps[]",
+      default: "required",
+    },
+    defaultBackgroundColor: {
+      description: "Default background color for blocks if not specified.",
+      type: "string",
+      default: '"bg-gray-400 dark:bg-gray-400"',
+    },
+    hoverEffect: {
+      description: "Enable opacity hover effect on blocks.",
+      type: "boolean",
+      default: "false",
+    },
+    className: {
+      description: "Additional CSS classes for the tracker container.",
+      type: "string",
+      default: '""',
+    },
+  }}
+/>
+
+### TrackerBlockProps
+
+<TypeTable
+  type={{
+    key: {
+      description: "Optional unique key for the block.",
+      type: "string | number",
+      default: "index",
+    },
+    color: {
+      description: "Tailwind class for the block color (e.g. 'bg-blue-500').",
+      type: "string",
+      default: '"bg-gray-400 dark:bg-gray-400"',
+    },
+    tooltip: {
+      description: "Tooltip text shown on hover.",
+      type: "string",
+      default: '""',
+    },
+    hoverEffect: {
+      description: "Enable opacity hover effect on this block.",
+      type: "boolean",
+      default: "false",
+    },
+    defaultBackgroundColor: {
+      description: "Fallback background color if color is not set.",
+      type: "string",
+      default: '"bg-gray-400 dark:bg-gray-400"',
+    },
+  }}
+/>
+
+---
+
+For more advanced usage, see the source code or customize the block rendering.

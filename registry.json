@@ -1,0 +1,85 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "lyxui",
+  "homepage": "https://lyxui.wisplabs.xyz",
+  "items": [
+    {
+      "name": "animated-cursor",
+      "type": "registry:ui",
+      "title": "Animated Cursor",
+      "description": "A simple animated cursor component.",
+      "dependencies": ["framer-motion"],
+      "files": [
+        {
+          "path": "registry/new-york/lyxui/cursor.tsx",
+          "type": "registry:ui",
+          "target": "components/lyxui/cursor.tsx"
+        }
+      ]
+    },
+    {
+      "name": "kanban",
+      "type": "registry:component",
+      "title": "Kanban Board",
+      "description": "A simple kanban board component.",
+      "dependencies": [
+        "@dnd-kit/modifiers",
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "@radix-ui/react-slot"
+      ],
+      "files": [
+        {
+          "path": "registry/new-york/lyxui/kanban.tsx",
+          "type": "registry:ui",
+          "target": "components/lyxui/kanban.tsx"
+        },
+        {
+          "path": "registry/new-york/lyxui/lib/compose-refs.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "name": "profile",
+      "type": "registry:component",
+      "title": "Profile",
+      "description": "A simple profile card component.",
+      "files": [
+        {
+          "path": "registry/new-york/lyxui/profile.tsx",
+          "type": "registry:ui",
+          "target": "components/lyxui/profile.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tracker",
+      "type": "registry:component",
+      "title": "Tracker",
+      "description": "A simple tracker component.",
+      "dependencies": ["@radix-ui/react-hover-card"],
+      "files": [
+        {
+          "path": "registry/new-york/lyxui/tracker.tsx",
+          "type": "registry:ui",
+          "target": "components/lyxui/tracker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "masked-div",
+      "type": "registry:component",
+      "title": "Masked Div",
+      "description": "A simple masked div component.",
+      "files": [
+        {
+          "path": "registry/new-york/lyxui/masked-div.tsx",
+          "type": "registry:ui",
+          "target": "components/lyxui/masked-div.tsx"
+        }
+      ]
+    }
+  ]
+}

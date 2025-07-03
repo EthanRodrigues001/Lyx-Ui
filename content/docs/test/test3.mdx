@@ -1,0 +1,373 @@
+---
+title: Data Table
+description: A powerful and flexible data table component for displaying, filtering, sorting, and paginating tabular data.
+preview: true
+links:
+  doc: https://tanstack.com/table/latest/docs/introduction
+  api: /docs/components/data-table#api-reference
+---
+
+## Installation
+
+    Install the components and dependencies:
+
+    ```bash
+    npx shadcn@latest add "https://diceui.com/r/data-table"
+    ```
+
+## Layout
+
+Import the components and compose them together:
+
+```tsx
+import { DataTable } from "@/components/data-table";
+import { DataTableToolbar } from "@/components/data-table-toolbar";
+import { DataTableAdvancedToolbar } from "@/components/data-table-advanced-toolbar";
+import { DataTableFilterList } from "@/components/data-table-filter-list";
+import { DataTableSortList } from "@/components/data-table-sort-list";
+import { useDataTable } from "@/hooks/use-data-table";
+
+const { table } = useDataTable({
+  data,
+  columns,
+  pageCount,
+});
+
+// With standard toolbar
+<DataTable table={table}>
+  <DataTableToolbar table={table}>
+    <DataTableSortList table={table} />
+  </DataTableToolbar>
+</DataTable>
+
+// With advanced toolbar
+<DataTable table={table}>
+  <DataTableAdvancedToolbar table={table}>
+    <DataTableFilterList table={table} />
+    <DataTableSortList table={table} />
+  </DataTableAdvancedToolbar>
+</DataTable>
+```
+
+## Sort List
+
+The [`DataTableSortList`](#datatablesortlist) provides a comprehensive way to sort data by multiple columns simultaneously.
+
+### Features
+
+- Supports multiple column sorting
+- Drag and drop reordering
+- Ascending and descending directions
+
+### Installation
+
+```bash
+npx shadcn@latest add "https://diceui.com/r/data-table-sort-list"
+```
+
+## Filter List
+
+The [`DataTableFilterList`](#datatablefilterlist) provides a comprehensive way to filter data with multiple conditions.
+
+### Features
+
+- Multiple filter conditions with AND/OR logic
+- Drag and drop reordering
+- Dynamic operators per field type
+
+### Installation
+
+```bash
+npx shadcn@latest add "https://diceui.com/r/data-table-filter-list"
+```
+
+## Filter Menu
+
+The [`DataTableFilterMenu`](#datatablefiltermenu) provides a command palette-style interface for quickly adding and managing filters.
+
+### Features
+
+- Command palette-style interface
+- Context-aware input fields
+- Compact token display
+
+### Installation
+
+```bash
+npx shadcn@latest add "https://diceui.com/r/data-table-filter-menu"
+```
+
+## Action Bar
+
+The [`DataTableActionBar`](#datatableactionbar) provides a toolbar for the data table when rows are selected.
+
+### Features
+
+- Floating action bar
+- Customizable actions
+- Row selection tracking
+
+### Installation
+
+```bash
+npx shadcn@latest add "https://diceui.com/r/data-table-action-bar"
+```
+
+## Walkthrough
+
+    Define columns with appropriate metadata:
+
+    ```tsx
+    import { Text, CalendarIcon, DollarSign } from "lucide-react";
+    import { DataTableColumnHeader } from "@/components/data-table-column-header";
+
+    const columns = React.useMemo(() => [
+      {
+        // Provide an unique id for the column
+        // This id will be used as query key for the column filter
+        id: "title", // [!code highlight]
+        accessorKey: "title",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Title" />
+        ),
+        cell: ({ row }) => <div>{row.getValue("title")}</div>,
+        // Define the column meta options for sorting, filtering, and view options
+        meta: { // [!code highlight]
+          label: "Title", // [!code highlight]
+          placeholder: "Search titles...", // [!code highlight]
+          variant: "text", // [!code highlight]
+          icon: Text, // [!code highlight]
+        }, // [!code highlight]
+        // By default, the column will not be filtered. Set to `true` to enable filtering.
+        enableColumnFilter: true, // [!code highlight]
+      },
+    ], []);
+    ```
+
+
+    Initialize the table state using the `useDataTable` hook:
+
+    ```tsx
+    import { useDataTable } from "@/hooks/use-data-table";
+
+    function DataTableDemo() {
+      const { table } = useDataTable({
+        data,
+        columns,
+        // Pass the total number of pages for the table
+        pageCount, // [!code highlight]
+        initialState: {
+          sorting: [{ id: "createdAt", desc: true }],
+          pagination: { pageSize: 10 },
+        },
+        // Unique identifier for rows, can be used for unique row selection
+        getRowId: (row) => row.id, // [!code highlight]
+      });
+
+      return (
+        // ... render table
+      );
+    }
+    ```
+
+
+    Pass the table instance to the `DataTable`, and `DataTableToolbar` components:
+
+    ```tsx
+    import { DataTable } from "@/components/data-table";
+    import { DataTableToolbar } from "@/components/data-table-toolbar";
+    import { DataTableSortList } from "@/components/data-table-sort-list";
+
+    function DataTableDemo() {
+      return (
+        <DataTable table={table}>
+          <DataTableToolbar table={table}>
+            <DataTableSortList table={table} />
+          </DataTableToolbar>
+        </DataTable>
+      );
+    }
+    ```
+
+    For advanced filtering, use the `DataTableAdvancedToolbar` component:
+
+    ```tsx
+    import { DataTableAdvancedToolbar } from "@/components/data-table-advanced-toolbar";
+    import { DataTableFilterList } from "@/components/data-table-filter-list";
+    import { DataTableFilterMenu } from "@/components/data-table-filter-menu";
+
+    function DataTableDemo() {
+      return (
+        <DataTable table={table}>
+          <DataTableAdvancedToolbar table={table}>
+            <DataTableFilterList table={table} />
+            <DataTableSortList table={table} />
+          </DataTableAdvancedToolbar>
+        </DataTable>
+      );
+    }
+    ```
+
+
+    Alternatively, swap out `DataTableFilterList` with `DataTableFilterMenu` for a command palette-style interface:
+
+    ```tsx
+    import { DataTableAdvancedToolbar } from "@/components/data-table-advanced-toolbar";
+    import { DataTableFilterList } from "@/components/data-table-filter-list"; // [!code --]
+    import { DataTableFilterMenu } from "@/components/data-table-filter-menu"; // [!code ++]
+    import { DataTableSortList } from "@/components/data-table-sort-list";
+
+    function DataTableDemo() {
+      return (
+        <DataTable table={table}>
+          <DataTableAdvancedToolbar table={table}>
+            {/* [!code --] */}
+            <DataTableFilterList table={table} />
+            {/* [!code ++] */}
+            <DataTableFilterMenu table={table} />
+            <DataTableSortList table={table} />
+          </DataTableAdvancedToolbar>
+        </DataTable>
+      );
+    }
+    ```
+
+
+    Render an action bar on row selection:
+
+    ```tsx
+    import { DataTableActionBar } from "@/components/data-table-action-bar";
+    import { CustomTableActions } from "@/components/custom-table-actions";
+
+    function DataTableDemo() {
+      return (
+        <DataTable
+          table={table}
+          actionBar={
+            <DataTableActionBar table={table}>
+              {/* Add your custom actions here */}
+              <CustomTableActions />
+            </DataTableActionBar>
+          }
+        >
+          <DataTableToolbar table={table} />
+        </DataTable>
+      );
+    }
+    ```
+
+## API Reference
+
+### Column Definitions
+
+The column definitions are used to define the columns of the data table.
+
+```tsx
+const columns = React.useMemo<ColumnDef<Project>[]>(
+  () => [
+    {
+      // Required: Unique identifier for the column
+      id: "title", // [!code highlight]
+      // Required: Key to access the data, `accessorFn` can also be used
+      accessorKey: "title", // [!code highlight]
+      // Optional: Custom header component
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Title" />
+      ),
+      // Optional: Custom cell component
+      cell: ({ row }) => <div>{row.getValue("title")}</div>,
+      // Optional: Meta options for filtering, sorting, and view options
+      meta: {
+        label: "Title",
+        placeholder: "Search titles...",
+        variant: "text",
+        icon: Text,
+      },
+      // By default, the column will not be filtered. Set to `true` to enable filtering.
+      enableColumnFilter: true, // [!code highlight]
+    },
+    {
+      id: "status",
+      // Access nested data using `accessorFn`
+      accessorFn: (row) => row.lineItem.status,
+      header: "Status",
+      meta: {
+        label: "Status",
+        variant: "select",
+        options: [
+          { label: "Active", value: "active" },
+          { label: "Inactive", value: "inactive" },
+        ],
+      },
+      enableColumnFilter: true,
+    },
+  ],
+  []
+);
+```
+
+#### Properties
+
+Core configuration options for defining columns.
+
+#### Column Meta
+
+Column meta options for filtering, sorting, and view options.
+
+#### Filter Variants
+
+Available filter variants for [column meta](#column-meta).
+
+Reference the [TanStack Table Column Definitions Guide](https://tanstack.com/table/latest/docs/guide/column-defs#column-definitions-guide) for detailed column definition guide.
+
+### useDataTable
+
+A hook for initializing the data table with state management.
+
+### DataTable
+
+The main data table component.
+
+### DataTableColumnHeader
+
+Custom header component for columns with sorting.
+
+### DataTableToolbar
+
+Standard toolbar with filtering and view options.
+
+### DataTableAdvancedToolbar
+
+Advanced toolbar with more comprehensive filtering capabilities.
+
+### DataTableViewOptions
+
+Controls column visibility and display preferences in the data table.
+
+### DataTableSortList
+
+List of applied sorting with ability to add, remove, and modify sorting.
+
+### DataTableFilterList
+
+List of applied filters with ability to add, remove, and modify filters.
+
+### DataTableFilterMenu
+
+Filter menu with ability to add, remove, and modify filters.
+
+### DataTableActionBar
+
+Floating action bar component for actions for selected rows.
+
+### DataTablePagination
+
+Pagination controls for the data table.
+
+## Accessibility
+
+### Keyboard Interactions
+
+## Credits
+
+- [shadcn/ui](<https://github.com/shadcn-ui/ui/tree/main/apps/www/app/(app)/examples/tasks>) - For the initial implementation of the data table.
