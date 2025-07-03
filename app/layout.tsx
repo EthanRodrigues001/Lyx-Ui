@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: "Lyx UI",
     images: [
       {
-        url: "https://lyxui.wisplabs.xyz/og-image.png",
+        url: "https://lyxui.wisplabs.xyz/images/og-image.png",
         width: 1200,
         height: 630,
         alt: "Lyx UI Open Graph Image",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     description: "Build your UI your way with Lyx UI",
     images: [
       {
-        url: "https://lyxui.wisplabs.xyz/og-image.png",
+        url: "https://lyxui.wisplabs.xyz/images/og-image.png",
         width: 1200,
         height: 630,
         alt: "Lyx UI Open Graph Image",
